@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database>
+    <tables>
+        <table name="users">
+            <fields>
+                <field name="id" type="int"></field>
+                <field name="first_name" type="string"></field>
+                <field name="last_name" type="string"></field>
+            </fields>
+        </table>
+        <table name="messages">
+        </table>
+    </tables>
+    <views>fghgfhghfghfgh
+    </views>
+    <procedures>jhjfhjhgjg
+    </procedures>
+</database>
