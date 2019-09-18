@@ -165,6 +165,21 @@ public class MyTree {
     }
 
 
+    public MyNode findNodeInTreeFirst(MyNode node, String searchNodeName) {
+        MyNode searchNode = null;
+        if (searchNodeName.equals(node.getName())) {
+            return node;
+        }
+        List<MyNode> children = node.getChildren();
+        for (MyNode eachNode: children) {
+            MyNode nodeInTreeFirst = findNodeInTreeFirst(eachNode, searchNodeName);
+            if (nodeInTreeFirst != null) {
+                searchNode = nodeInTreeFirst;
+            }
+        }
+        return searchNode;
+    }
+
 
 }
 

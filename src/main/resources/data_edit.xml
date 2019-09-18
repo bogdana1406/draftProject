@@ -1,191 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<schemas>
+<databases>
     <information_schema/>
     <mysql/>
     <performance_schema/>
     <productsdb>
-        <customers>
-            <Id/>
-            <Age/>
-            <FirstName/>
-            <LastName/>
-            <Phone/>
-        </customers>
-        <orders>
-            <Id/>
-            <CustomerId/>
-            <CreatedAt/>
-        </orders>
+        <customer>
+            <Id NULLABLE="1" columnDef="" size="10" type="INT"/>
+            <Age NULLABLE="1" columnDef="" size="10" type="INT"/>
+            <FirstName NULLABLE="1" columnDef="" size="20" type="VARCHAR"/>
+            <LastName NULLABLE="1" columnDef="" size="20" type="VARCHAR"/>
+        </customer>
+        <customers/>
+        <orders/>
+        <customer/>
+        <customers/>
+        <orders/>
     </productsdb>
     <sakila>
-        <actor>
-            <actor_id/>
-            <first_name/>
-            <last_name/>
-            <last_update/>
-        </actor>
-        <address>
-            <address_id/>
-            <address/>
-            <address2/>
-            <district/>
-            <city_id/>
-            <postal_code/>
-            <phone/>
-            <location/>
-            <last_update/>
-        </address>
-        <category>
-            <category_id/>
-            <name/>
-            <last_update/>
-        </category>
-        <city>
-            <city_id/>
-            <city/>
-            <country_id/>
-            <last_update/>
-        </city>
-        <country>
-            <country_id/>
-            <country/>
-            <last_update/>
-        </country>
+        <actor/>
+        <address/>
+        <category/>
+        <city/>
+        <country/>
         <customer>
-            <customer_id/>
-            <store_id/>
-            <first_name/>
-            <last_name/>
-            <email/>
-            <address_id/>
-            <active/>
-            <create_date/>
-            <last_update/>
+            <customer_id NULLABLE="0" columnDef="" size="5" type="SMALLINT UNSIGNED"/>
+            <store_id NULLABLE="0" columnDef="" size="3" type="TINYINT UNSIGNED"/>
+            <first_name NULLABLE="0" columnDef="" size="45" type="VARCHAR"/>
+            <last_name NULLABLE="0" columnDef="" size="45" type="VARCHAR"/>
+            <email NULLABLE="1" columnDef="" size="50" type="VARCHAR"/>
+            <address_id NULLABLE="0" columnDef="" size="5" type="SMALLINT UNSIGNED"/>
+            <active NULLABLE="0" columnDef="1" size="1" type="BIT"/>
+            <create_date NULLABLE="0" columnDef="" size="26" type="DATETIME"/>
+            <last_update NULLABLE="1" columnDef="CURRENT_TIMESTAMP" size="26" type="TIMESTAMP"/>
         </customer>
-        <film>
-            <film_id/>
-            <title/>
-            <description/>
-            <release_year/>
-            <language_id/>
-            <original_language_id/>
-            <rental_duration/>
-            <rental_rate/>
-            <length/>
-            <replacement_cost/>
-            <rating/>
-            <special_features/>
-            <last_update/>
-        </film>
-        <film_actor>
-            <actor_id/>
-            <film_id/>
-            <last_update/>
-        </film_actor>
-        <film_category>
-            <film_id/>
-            <category_id/>
-            <last_update/>
-        </film_category>
-        <film_text>
-            <film_id/>
-            <title/>
-            <description/>
-        </film_text>
-        <inventory>
-            <inventory_id/>
-            <film_id/>
-            <store_id/>
-            <last_update/>
-        </inventory>
-        <language>
-            <language_id/>
-            <name/>
-            <last_update/>
-        </language>
-        <payment>
-            <payment_id/>
-            <customer_id/>
-            <staff_id/>
-            <rental_id/>
-            <amount/>
-            <payment_date/>
-            <last_update/>
-        </payment>
-        <rental>
-            <rental_id/>
-            <rental_date/>
-            <inventory_id/>
-            <customer_id/>
-            <return_date/>
-            <staff_id/>
-            <last_update/>
-        </rental>
-        <staff>
-            <staff_id/>
-            <first_name/>
-            <last_name/>
-            <address_id/>
-            <picture/>
-            <email/>
-            <store_id/>
-            <active/>
-            <username/>
-            <password/>
-            <last_update/>
-        </staff>
-        <store>
-            <store_id/>
-            <manager_staff_id/>
-            <address_id/>
-            <last_update/>
-        </store>
+        <film/>
+        <film_actor/>
+        <film_category/>
+        <film_text/>
+        <inventory/>
+        <language/>
+        <payment/>
+        <rental/>
+        <staff/>
+        <store/>
+        <actor/>
+        <address/>
+        <category/>
+        <city/>
+        <country/>
+        <customer/>
+        <film/>
+        <film_actor/>
+        <film_category/>
+        <film_text/>
+        <inventory/>
+        <language/>
+        <payment/>
+        <rental/>
+        <staff/>
+        <store/>
     </sakila>
     <sys>
-        <sys_config>
-            <variable/>
-            <value/>
-            <set_time/>
-            <set_by/>
-        </sys_config>
+        <sys_config/>
+        <sys_config/>
     </sys>
     <test>
-        <users>
-            <id/>
-            <name/>
-            <age/>
-        </users>
+        <users/>
     </test>
     <world>
-        <city>
-            <ID/>
-            <Name/>
-            <CountryCode/>
-            <District/>
-            <Population/>
-        </city>
-        <country>
-            <Code/>
-            <Name/>
-            <Continent/>
-            <Region/>
-            <SurfaceArea/>
-            <IndepYear/>
-            <Population/>
-            <LifeExpectancy/>
-            <GNP/>
-            <GNPOld/>
-            <LocalName/>
-            <GovernmentForm/>
-            <HeadOfState/>
-            <Capital/>
-            <Code2/>
-        </country>
-        <countrylanguage>
-            <CountryCode/>
-            <Language/>
-            <IsOfficial/>
-            <Percentage/>
-        </countrylanguage>
+        <city/>
+        <country/>
+        <countrylanguage/>
+        <city/>
+        <country/>
+        <countrylanguage/>
     </world>
-</schemas>
+</databases>

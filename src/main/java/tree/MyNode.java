@@ -78,6 +78,16 @@ public class MyNode {
             return true;
         }
     }
+
+    public MyNode getChild(String childName) {
+        MyNode searchChild = null;
+        for (MyNode child: children) {
+            if (childName.equals(child.getName())) {
+                searchChild = child;
+            }
+        }
+        return searchChild;
+    }
 }
 
 
