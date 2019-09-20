@@ -3,6 +3,11 @@ package database;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import tree.MyNode;
 import tree.MyTree;
 
@@ -16,7 +21,7 @@ public class TreeDatabase extends MyTree {
         //создаем корневой узел
         MyNode startNode = new MyNode();
         // присваиваем название корневому узлу
-        startNode.setName("databases");
+        startNode.setName("SCHEMAS");
         // устанавливаем startNode (с названием "databases") корнем дерева
         setRoot(startNode);
         //в resultSet получаем все БД
@@ -37,6 +42,26 @@ public class TreeDatabase extends MyTree {
         return startNode;
     }
 
+    public MyNode parseNodesToDatabase(String databaseName, MyNode parent) {
+        MyNode dbNode = parent.getChild(databaseName);
+
+        MyNode tableNode = new MyNode();
+        tableNode.setName("Tables");
+        MyNode viewNode = new MyNode();
+        viewNode.setName("Views");
+        MyNode procedureNode = new MyNode();
+        procedureNode.setName("Stored_Procedures");
+        MyNode functionNode = new MyNode();
+        functionNode.setName("Functions");
+
+        dbNode.addChild(tableNode);
+        dbNode.addChild(viewNode);
+        dbNode.addChild(procedureNode);
+        dbNode.addChild(functionNode);
+
+       return parent;
+    }
+
     // ++++++++++++++++++++++добавляем узлы таблиц в БД (для одной любой БД)+++++++++++++++++++++++
     //=============================================================================================
 
@@ -48,7 +73,7 @@ public class TreeDatabase extends MyTree {
         ResultSet resultSet = meta.getTables(databaseName, null, null, types);
         String tableName;
         // из дерева получаем узел (ребенка) с названием БД
-        MyNode dbNode = parent.getChild(databaseName);
+        MyNode dbNode = parent.getChild(databaseName).getChild("Tables");
         while (resultSet.next()) {
             // пока в resultSet содежаться таблицы создаем новый узел
             MyNode tableNode = new MyNode();
@@ -74,41 +99,52 @@ public class TreeDatabase extends MyTree {
     // К этому дереву будут добавленны новые узлы (колонки), а также ключи
     // к узлам колонок в качестве атрибутов установленны данные колонки (тип, размер...)
     // функция вернет измененное, полученное дерево
-    public MyNode pareseColumnToTable(DatabaseMetaData meta, String databaseName, String tableName, MyNode parent) throws SQLException {
+    public MyNode parseColumnToTable(DatabaseMetaData meta, String databaseName, String tableName, MyNode parent) throws SQLException {
 
         String columnName;
-
-
-        MyNode dbNode = parent.getChild(databaseName);
-
+        // получаем узел, который соотвтствует БД (находим его как дочерний узел parent)
+        MyNode dbNode = parent.getChild(databaseName).getChild("Tables");
+        // получаем узел, который соотвтствует таблице (находим его как дочерний узел БД)
         MyNode tableNode = dbNode.getChild(tableName);
-//        MyNode dbNode = tableNode.getParent();
-
-        ResultSet resultSet = meta.getColumns(dbNode.getName(), null, tableNode.getName(), null);
-
+        // получаем в resultSet колонки таблицы
+        ResultSet resultSet = meta.getColumns(dbNode.getParent().getName(), null, tableNode.getName(), null);
+        // пока есть колонки
         while (resultSet.next()) {
+            // создаем новый узел
             MyNode columnNode = new MyNode();
-
-
+            // получаем название колонки
             columnName = resultSet.getString("COLUMN_NAME");
+            // устанавливаем имя узла, соответственно названию колонки
             columnNode.setName(columnName);
 
-
+            // ++++++++получить данные по столбцам+++++++++++++++++++
+            Map<String, String> attributeSet = new HashMap<>();
+            // получаем тип колонки
             String columnType = resultSet.getString("TYPE_NAME");
-
-
-            // получить данные по столбцам
+            attributeSet.put("Type", columnType);
             // размер колонки (разобратья со значением для int)
             int size = resultSet.getInt("COLUMN_SIZE");
-            // допустимо ли NULL
-            int nullable = resultSet.getInt("NULLABLE");
+            attributeSet.put("Size", Integer.toString(size));
             // значние по умолчанию
             String columnDef = resultSet.getString("COLUMN_DEF");
+            attributeSet.put("Default_Value", columnDef);
+            // допустимо ли NULL
+            int nullable = resultSet.getInt("NULLABLE");
+            attributeSet.put("Nullable", Integer.toString(nullable));
+            // получить коммент
+            String comment = resultSet.getString("REMARKS");
+            attributeSet.put("Comment", comment);
 
-            columnNode.addAttributes("type", columnType);
-            columnNode.addAttributes("size", Integer.toString(size));
-            columnNode.addAttributes("NULLABLE", Integer.toString(nullable));
-            columnNode.addAttributes("Default value", columnDef );
+            for (String key: attributeSet.keySet()) {
+                if (attributeSet.get(key) != null) {
+                    columnNode.addAttributes(key, attributeSet.get(key));
+                }
+            }
+
+//            columnNode.addAttributes("type", columnType);
+//            columnNode.addAttributes("size", Integer.toString(size));
+//            columnNode.addAttributes("NULLABLE", Integer.toString(nullable));
+////            columnNode.addAttributes("Default value", columnDef );
             tableNode.addChild(columnNode);
         }
         return parent;
@@ -120,14 +156,14 @@ public class TreeDatabase extends MyTree {
         String tableName;
         for (MyNode databaseNode: parent.getChildren()) {
             ResultSet resultSet = meta.getTables(databaseNode.getName(), null, "%", types);
-                while (resultSet.next()) {
-                    MyNode tableNode = new MyNode();
-                    tableName = resultSet.getString(3);
-                    tableNode.setName(tableName);
-                    databaseNode.addChild(tableNode);
+            while (resultSet.next()) {
+                MyNode tableNode = new MyNode();
+                tableName = resultSet.getString(3);
+                tableNode.setName(tableName);
+                databaseNode.addChild(tableNode);
 //                    System.out.println("Table Name = " + tableName);
-                }
             }
+        }
 //            resultSet.close();
         return parent;
     }

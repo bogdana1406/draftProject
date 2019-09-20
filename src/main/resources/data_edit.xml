@@ -1,78 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databases>
+<SCHEMAS>
     <information_schema/>
     <mysql/>
     <performance_schema/>
     <productsdb>
-        <customer>
-            <Id NULLABLE="1" columnDef="" size="10" type="INT"/>
-            <Age NULLABLE="1" columnDef="" size="10" type="INT"/>
-            <FirstName NULLABLE="1" columnDef="" size="20" type="VARCHAR"/>
-            <LastName NULLABLE="1" columnDef="" size="20" type="VARCHAR"/>
-        </customer>
-        <customers/>
-        <orders/>
-        <customer/>
-        <customers/>
-        <orders/>
+        <Tables>
+            <customer>
+                <Id Comment="" Nullable="1" Size="10" Type="INT"/>
+                <Age Comment="" Nullable="1" Size="10" Type="INT"/>
+                <FirstName Comment="" Nullable="1" Size="20" Type="VARCHAR"/>
+                <LastName Comment="" Nullable="1" Size="20" Type="VARCHAR"/>
+            </customer>
+            <customers/>
+            <orders/>
+        </Tables>
+        <Views/>
+        <Stored_Procedures/>
+        <Functions/>
     </productsdb>
-    <sakila>
-        <actor/>
-        <address/>
-        <category/>
-        <city/>
-        <country/>
-        <customer>
-            <customer_id NULLABLE="0" columnDef="" size="5" type="SMALLINT UNSIGNED"/>
-            <store_id NULLABLE="0" columnDef="" size="3" type="TINYINT UNSIGNED"/>
-            <first_name NULLABLE="0" columnDef="" size="45" type="VARCHAR"/>
-            <last_name NULLABLE="0" columnDef="" size="45" type="VARCHAR"/>
-            <email NULLABLE="1" columnDef="" size="50" type="VARCHAR"/>
-            <address_id NULLABLE="0" columnDef="" size="5" type="SMALLINT UNSIGNED"/>
-            <active NULLABLE="0" columnDef="1" size="1" type="BIT"/>
-            <create_date NULLABLE="0" columnDef="" size="26" type="DATETIME"/>
-            <last_update NULLABLE="1" columnDef="CURRENT_TIMESTAMP" size="26" type="TIMESTAMP"/>
-        </customer>
-        <film/>
-        <film_actor/>
-        <film_category/>
-        <film_text/>
-        <inventory/>
-        <language/>
-        <payment/>
-        <rental/>
-        <staff/>
-        <store/>
-        <actor/>
-        <address/>
-        <category/>
-        <city/>
-        <country/>
-        <customer/>
-        <film/>
-        <film_actor/>
-        <film_category/>
-        <film_text/>
-        <inventory/>
-        <language/>
-        <payment/>
-        <rental/>
-        <staff/>
-        <store/>
-    </sakila>
-    <sys>
-        <sys_config/>
-        <sys_config/>
-    </sys>
-    <test>
-        <users/>
-    </test>
-    <world>
-        <city/>
-        <country/>
-        <countrylanguage/>
-        <city/>
-        <country/>
-        <countrylanguage/>
-    </world>
-</databases>
+    <sakila/>
+    <sys/>
+    <test/>
+    <world/>
+</SCHEMAS>

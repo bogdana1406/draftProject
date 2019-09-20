@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -124,7 +125,12 @@ public class TreeXML extends MyTree {
         if (node.hasAttributes()) {
             Map<String, String> attributes = node.getAttributes();
             for (String key: attributes.keySet()) {
-                element.setAttribute(key, attributes.get(key));
+                try {
+                    element.setAttribute(key, attributes.get(key));
+                } catch (DOMException e) {
+                    System.out.println("Bad attribute " );
+//                    e.printStackTrace();
+                }
             }
         }
     }
