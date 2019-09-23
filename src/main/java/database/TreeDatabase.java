@@ -42,15 +42,25 @@ public class TreeDatabase extends MyTree {
         return startNode;
     }
 
-    public MyNode parseNodesToDatabase(String databaseName, MyNode parent) {
-        MyNode dbNode = parent.getChild(databaseName);
+    // +++++++++++++++добавляем все узлы в БД (Tables, Views, Stored_Procedures, Functions)+++++++++++++++++++++++++++
+    //============================================================================
 
+    // функция принимает корень дерева и название БД, в которую нужно подгружать узлы,
+    // возвращает дерево с БД, в которую добавленны узлы
+    public MyNode parseNodesToDatabase(String databaseName, MyNode parent) {
+
+        // находим узел, название которого соответствует названию БД
+        MyNode dbNode = parent.getChild(databaseName);
+        // узел таблиц
         MyNode tableNode = new MyNode();
         tableNode.setName("Tables");
+        // узел Views
         MyNode viewNode = new MyNode();
         viewNode.setName("Views");
+        // узел Stored_Procedures
         MyNode procedureNode = new MyNode();
         procedureNode.setName("Stored_Procedures");
+        // узел Functions
         MyNode functionNode = new MyNode();
         functionNode.setName("Functions");
 
@@ -62,18 +72,43 @@ public class TreeDatabase extends MyTree {
        return parent;
     }
 
+    // добавляем узлы в таблицу (Columns, Primary_Keys, Foreing_Keys).
+    // функция принимает газвание БД, название таблицы, корень дерева.
+    // возвращает дерево, в таблицу которого добавлены пустые узлы
+    public MyNode parseNodesToTable(String databaseName, String tableName, MyNode parent) {
+        // определяем узел название которого соответствует названию БД
+        MyNode dbNode = parent.getChild(databaseName);
+        // определяем узел, содержащийся с найденом узле БД,
+        // название которого соответствует названию таблицы
+        MyNode tableNode = findNodeInTreeFirst(dbNode, tableName);
+        // узел колонок
+        MyNode columnNode = new MyNode();
+        columnNode.setName("Columns");
+        // узел первичных ключей
+        MyNode primaryNode = new MyNode();
+        primaryNode.setName("Primary_Keys");
+        // узел внешних ключей
+        MyNode foreingNode = new MyNode();
+        foreingNode.setName("Foreing_Keys");
+
+        tableNode.addChild(columnNode);
+        tableNode.addChild(primaryNode);
+        tableNode.addChild(foreingNode);
+
+        return parent;
+    }
     // ++++++++++++++++++++++добавляем узлы таблиц в БД (для одной любой БД)+++++++++++++++++++++++
     //=============================================================================================
 
     // функция получает входными параметрами meta, название БД, корень дерева, в который добавлены все БД.
     // К этому дереву будут добавленны новые узлы (таблицы). его функция и вернет
-    public MyNode parsTableToDatabase(DatabaseMetaData meta, String databaseName, MyNode parent) throws SQLException {
+    public MyNode parsTablesToDatabase(DatabaseMetaData meta, String databaseName, MyNode parent) throws SQLException {
         String[] types = { "TABLE" };
         // в resultSet получаем все таблицы конкретной БД
         ResultSet resultSet = meta.getTables(databaseName, null, null, types);
         String tableName;
-        // из дерева получаем узел (ребенка) с названием БД
-        MyNode dbNode = parent.getChild(databaseName).getChild("Tables");
+        // из дерева получаем узел (ребенка) с названием БД, а у него узел таблиц
+        MyNode dbTableNode = parent.getChild(databaseName).getChild("Tables");
         while (resultSet.next()) {
             // пока в resultSet содежаться таблицы создаем новый узел
             MyNode tableNode = new MyNode();
@@ -82,7 +117,7 @@ public class TreeDatabase extends MyTree {
             // устанавливаем новому узлу имя, соответсвующее названию таблицы
             tableNode.setName(tableName);
             // добавляем в узел БД узел таблицы (каждой)
-            dbNode.addChild(tableNode);
+            dbTableNode.addChild(tableNode);
         }
 
         // добавить узлы процедур
@@ -92,6 +127,34 @@ public class TreeDatabase extends MyTree {
         return parent;
     }
 
+    // парсим сохраненные процедуры в БД
+    public void parseStoredProceduresDatabase(DatabaseMetaData meta, MyNode parent) throws SQLException {
+        ResultSet resultSet = meta.getProcedures(null, null, "%");
+        while (resultSet.next()) {
+            String spName = resultSet.getString("PROCEDURE_NAME");
+            int spType = resultSet.getInt("PROCEDURE_TYPE");
+            System.out.println("Stored Procedure Name: " + spName);
+            if (spType == DatabaseMetaData.procedureReturnsResult) {
+                System.out.println("procedure Returns Result");
+            } else if (spType == DatabaseMetaData.procedureNoResult) {
+                System.out.println("procedure No Result");
+            } else {
+                System.out.println("procedure Result unknown");
+            }
+
+        }
+//        return parent;
+    }
+
+    // парсим вьюшки в БД
+    public MyNode parseViewsToDatabase(MyNode parent){
+        return parent;
+    }
+
+    // парсим функции в БД
+    public MyNode parseFunctionsToDatabase(MyNode parent){
+        return parent;
+    }
     // ++++++++++++++++++++Добавляем узлы колонок к узлу одной (любой) таблицы+++++++++++++++++++++++++
     // ================================================================================================
 
@@ -103,11 +166,11 @@ public class TreeDatabase extends MyTree {
 
         String columnName;
         // получаем узел, который соотвтствует БД (находим его как дочерний узел parent)
-        MyNode dbNode = parent.getChild(databaseName).getChild("Tables");
+        MyNode dbTableNode = parent.getChild(databaseName).getChild("Tables");
         // получаем узел, который соотвтствует таблице (находим его как дочерний узел БД)
-        MyNode tableNode = dbNode.getChild(tableName);
+        MyNode tableColumnNode = dbTableNode.getChild(tableName).getChild("Columns");
         // получаем в resultSet колонки таблицы
-        ResultSet resultSet = meta.getColumns(dbNode.getParent().getName(), null, tableNode.getName(), null);
+        ResultSet resultSet = meta.getColumns(dbTableNode.getParent().getName(), null, tableColumnNode.getParent().getName(), null);
         // пока есть колонки
         while (resultSet.next()) {
             // создаем новый узел
@@ -145,43 +208,20 @@ public class TreeDatabase extends MyTree {
 //            columnNode.addAttributes("size", Integer.toString(size));
 //            columnNode.addAttributes("NULLABLE", Integer.toString(nullable));
 ////            columnNode.addAttributes("Default value", columnDef );
-            tableNode.addChild(columnNode);
+            tableColumnNode.addChild(columnNode);
         }
         return parent;
     }
 
-    public MyNode parsTableToTree(DatabaseMetaData meta, MyNode parent) throws SQLException {
-        String[] types = { "TABLE" };
-
-        String tableName;
-        for (MyNode databaseNode: parent.getChildren()) {
-            ResultSet resultSet = meta.getTables(databaseNode.getName(), null, "%", types);
-            while (resultSet.next()) {
-                MyNode tableNode = new MyNode();
-                tableName = resultSet.getString(3);
-                tableNode.setName(tableName);
-                databaseNode.addChild(tableNode);
-//                    System.out.println("Table Name = " + tableName);
-            }
-        }
-//            resultSet.close();
+    // парсим первичные ключи в таблицу
+    public MyNode parsePrimaryKeysToColmn(MyNode parent) {
         return parent;
     }
 
-//    public MyNode parseCatalogToTree(DatabaseMetaData meta, MyNode parent) throws SQLException {
-//        for (MyNode dbNode : parent.getChildren()) {
-//            for (MyNode tableNode : dbNode.getChildren()) {
-//                ResultSet resultSet = meta.getColumns(dbNode.getName(), null, tableNode.getName(), "%");
-//                while (resultSet.next()) {
-//                    System.out.println("Column Name of table " + tableNode.getName() + " = "
-//                        + resultSet.getString(4));
-//
-//                }
-//            }
-//        }
-//    return parent;
-//    }
-
+    // парсим внешние ключи в таблицу
+    public MyNode parsePrimaryForeingToColmn(MyNode parent) {
+        return parent;
+    }
     public MyNode parseDataBase (DatabaseMetaData meta) throws SQLException {
 
         String[] types = {"TABLE"};

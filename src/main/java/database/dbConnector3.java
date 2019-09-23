@@ -24,6 +24,8 @@ public class dbConnector3 {
 
 
         DatabaseMetaData meta = conn.getMetaData();
+        parseStoredProceduresDatabase(meta);
+
         TreeDatabase treeDatabase = new TreeDatabase();
         MyNode node = treeDatabase.parsDatabasesToTree(meta);
 //        MyNode searchNode = treeDatabase.findNodeInTreeFirst(node, "mysql");
@@ -32,7 +34,8 @@ public class dbConnector3 {
 //        treeDatabase.parseNodesToDatabase("sakila", node);
 //        treeDatabase.parseNodesToDatabase("sakila", node);
 //        treeDatabase.parseNodesToDatabase("world", node);
-        treeDatabase.parsTableToDatabase(meta, "productsdb", node);
+        treeDatabase.parsTablesToDatabase(meta, "productsdb", node);
+        treeDatabase.parseNodesToTable("productsdb", "customer", node);
 //        treeDatabase.parsTableToDatabase(meta, "sakila", node);
         treeDatabase.parseColumnToTable(meta, "productsdb","customer", node);
 //        treeDatabase.parseColumnToTable(meta, "sakila","customer", node);
@@ -86,5 +89,23 @@ public class dbConnector3 {
 
         st.close();
         conn.close();
+    }
+
+    public static void parseStoredProceduresDatabase(DatabaseMetaData meta) throws SQLException {
+        ResultSet resultSet = meta.getProcedures("sakila", null, "%");
+        while (resultSet.next()) {
+            String spName = resultSet.getString("PROCEDURE_NAME");
+            int spType = resultSet.getInt("PROCEDURE_TYPE");
+            System.out.println("Stored Procedure Name: " + spName);
+            if (spType == DatabaseMetaData.procedureReturnsResult) {
+                System.out.println("procedure Returns Result");
+            } else if (spType == DatabaseMetaData.procedureNoResult) {
+                System.out.println("procedure No Result");
+            } else {
+                System.out.println("procedure Result unknown");
+            }
+
+        }
+//        return parent;
     }
 }
