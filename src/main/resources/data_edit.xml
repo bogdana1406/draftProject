@@ -1,1 +1,70 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><SCHEMAS><information_schema/><mysql/><performance_schema/><productsdb><Tables><customer><Columns><Id Comment="" Nullable="1" Size="10" Type="INT"/><Age Comment="" Nullable="1" Size="10" Type="INT"/><FirstName Comment="" Nullable="1" Size="20" Type="VARCHAR"/><LastName Comment="" Nullable="1" Size="20" Type="VARCHAR"/></Columns><Primary_Keys/><Foreing_Keys/></customer><customers/><orders/></Tables><Views/><Stored_Procedures/><Functions/></productsdb><sakila/><sys/><test/><world/></SCHEMAS>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<SCHEMAS>
+    <information_schema/>
+    <mysql/>
+    <performance_schema/>
+    <productsdb>
+        <Tables>
+            <customer/>
+            <customers>
+                <Columns/>
+                <Indexes/>
+                <Foreing_Keys Table="orders" Сolumn="CustomerId"/>
+            </customers>
+            <orders>
+                <Columns/>
+                <Indexes/>
+                <Foreing_Keys/>
+            </orders>
+        </Tables>
+        <Views/>
+        <Stored_Procedures/>
+        <Functions/>
+    </productsdb>
+    <sakila>
+        <Tables>
+            <actor/>
+            <address>
+                <Columns/>
+                <Indexes/>
+                <Foreing_Keys Table="store" Сolumn="address_id"/>
+            </address>
+            <category/>
+            <city/>
+            <country/>
+            <customer/>
+            <film/>
+            <film_actor/>
+            <film_category/>
+            <film_text/>
+            <inventory/>
+            <language/>
+            <payment/>
+            <rental/>
+            <staff/>
+            <store/>
+        </Tables>
+        <Views>
+            <actor_info/>
+            <customer_list/>
+            <film_list/>
+            <nicer_but_slower_film_list/>
+            <sales_by_film_category/>
+            <sales_by_store/>
+            <staff_list/>
+        </Views>
+        <Stored_Procedures>
+            <film_in_stock/>
+            <film_not_in_stock/>
+            <rewards_report/>
+        </Stored_Procedures>
+        <Functions>
+            <get_customer_balance/>
+            <inventory_held_by_customer/>
+            <inventory_in_stock/>
+        </Functions>
+    </sakila>
+    <sys/>
+    <test/>
+    <world/>
+</SCHEMAS>

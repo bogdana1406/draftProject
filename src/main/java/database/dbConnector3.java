@@ -24,20 +24,31 @@ public class dbConnector3 {
 
 
         DatabaseMetaData meta = conn.getMetaData();
-        parseStoredProceduresDatabase(meta);
+//        parseStoredProceduresDatabase(meta);
 
         TreeDatabase treeDatabase = new TreeDatabase();
         MyNode node = treeDatabase.parsDatabasesToTree(meta);
 //        MyNode searchNode = treeDatabase.findNodeInTreeFirst(node, "mysql");
 //        System.out.println("search node " + searchNode.getName());
         treeDatabase.parseNodesToDatabase("productsdb", node);
+        treeDatabase.parseNodesToDatabase("sakila", node);
+        treeDatabase.parseStoredProceduresToDatabase(meta, "sakila", node);
+        treeDatabase.parseFunctionsToDatabase(meta, "sakila", node);
+        treeDatabase.parseViewsToDatabase(meta, "sakila", node);
 //        treeDatabase.parseNodesToDatabase("sakila", node);
 //        treeDatabase.parseNodesToDatabase("sakila", node);
 //        treeDatabase.parseNodesToDatabase("world", node);
-        treeDatabase.parsTablesToDatabase(meta, "productsdb", node);
-        treeDatabase.parseNodesToTable("productsdb", "customer", node);
+        treeDatabase.parseTablesToDatabase(meta, "productsdb", node);
+        treeDatabase.parseTablesToDatabase(meta, "sakila", node);
+        treeDatabase.parseNodesToTable("productsdb", "customers", node);
+        treeDatabase.parseNodesToTable("productsdb", "orders", node);
+        treeDatabase.parseNodesToTable("sakila", "address", node);
 //        treeDatabase.parsTableToDatabase(meta, "sakila", node);
-        treeDatabase.parseColumnToTable(meta, "productsdb","customer", node);
+//        treeDatabase.parseColumnToTable(meta, "productsdb","customers", node);
+//        treeDatabase.parsePrimaryKeyToTable(meta, "productsdb", "customers", node);
+        treeDatabase.parseForeingKeyToTable(meta, "productsdb", "customers", node);
+        treeDatabase.parseForeingKeyToTable(meta, "productsdb", "orders", node);
+        treeDatabase.parseForeingKeyToTable(meta, "sakila", "address", node);
 //        treeDatabase.parseColumnToTable(meta, "sakila","customer", node);
 //        treeDatabase.parsTableToDatabase(meta, "world", node);
 //        treeDatabase.parsTableToDatabase(meta, "sys", node);
@@ -92,16 +103,20 @@ public class dbConnector3 {
     }
 
     public static void parseStoredProceduresDatabase(DatabaseMetaData meta) throws SQLException {
-        ResultSet resultSet = meta.getProcedures("sakila", null, "%");
+        ResultSet resultSet = meta.getProcedures("sys", null, "%");
         while (resultSet.next()) {
             String spName = resultSet.getString("PROCEDURE_NAME");
             int spType = resultSet.getInt("PROCEDURE_TYPE");
-            System.out.println("Stored Procedure Name: " + spName);
+//            System.out.print("Stored Procedure Name: " + spName + "   -   ");
             if (spType == DatabaseMetaData.procedureReturnsResult) {
-                System.out.println("procedure Returns Result");
-            } else if (spType == DatabaseMetaData.procedureNoResult) {
-                System.out.println("procedure No Result");
-            } else {
+                System.out.println("functions: ");
+                System.out.println(spName);
+            }
+            if (spType == DatabaseMetaData.procedureNoResult) {
+                System.out.println("procedure");
+                System.out.println(spName);
+            }
+            if((spType != DatabaseMetaData.procedureNoResult) && (spType != DatabaseMetaData.procedureReturnsResult)) {
                 System.out.println("procedure Result unknown");
             }
 
