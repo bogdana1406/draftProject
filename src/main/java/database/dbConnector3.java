@@ -28,13 +28,18 @@ public class dbConnector3 {
 
         TreeDatabase treeDatabase = new TreeDatabase();
         MyNode node = treeDatabase.parsDatabasesToTree(meta);
+        treeDatabase.parseDatabaseToTree(meta, "sakila", node);
+        treeDatabase.parseDatabaseToTree(meta, "productsdb", node);
+        TreeXML treeXML = new TreeXML();
+        treeXML.saveTreeToXML(node, "D:\\TestXML2\\src\\main\\resources\\database_edit.xml");
 //        MyNode searchNode = treeDatabase.findNodeInTreeFirst(node, "mysql");
 //        System.out.println("search node " + searchNode.getName());
         treeDatabase.parseNodesToDatabase("productsdb", node);
         treeDatabase.parseNodesToDatabase("sakila", node);
-        treeDatabase.parseStoredProceduresToDatabase(meta, "sakila", node);
-        treeDatabase.parseFunctionsToDatabase(meta, "sakila", node);
-        treeDatabase.parseViewsToDatabase(meta, "sakila", node);
+//        treeDatabase.parseStoredProceduresToDatabase(meta, "sakila", node);
+//        treeDatabase.parseFunctionsToDatabase(meta, "sakila", node);
+
+//        treeDatabase.parseViewsToDatabase(meta, "sakila", node);
 //        treeDatabase.parseNodesToDatabase("sakila", node);
 //        treeDatabase.parseNodesToDatabase("sakila", node);
 //        treeDatabase.parseNodesToDatabase("world", node);
@@ -42,13 +47,14 @@ public class dbConnector3 {
         treeDatabase.parseTablesToDatabase(meta, "sakila", node);
         treeDatabase.parseNodesToTable("productsdb", "customers", node);
         treeDatabase.parseNodesToTable("productsdb", "orders", node);
-        treeDatabase.parseNodesToTable("sakila", "address", node);
+        treeDatabase.parseNodesToTable("sakila", "customer", node);
 //        treeDatabase.parsTableToDatabase(meta, "sakila", node);
 //        treeDatabase.parseColumnToTable(meta, "productsdb","customers", node);
-//        treeDatabase.parsePrimaryKeyToTable(meta, "productsdb", "customers", node);
-        treeDatabase.parseForeingKeyToTable(meta, "productsdb", "customers", node);
+        treeDatabase.parseIndexesToTable(meta, "productsdb", "customers", node);
+        treeDatabase.parseIndexesToTable(meta, "productsdb", "orders", node);
+//        treeDatabase.parseForeingKeyToTable(meta, "productsdb", "customers", node);
         treeDatabase.parseForeingKeyToTable(meta, "productsdb", "orders", node);
-        treeDatabase.parseForeingKeyToTable(meta, "sakila", "address", node);
+        treeDatabase.parseForeingKeyToTable(meta, "sakila", "customer", node);
 //        treeDatabase.parseColumnToTable(meta, "sakila","customer", node);
 //        treeDatabase.parsTableToDatabase(meta, "world", node);
 //        treeDatabase.parsTableToDatabase(meta, "sys", node);
@@ -59,7 +65,7 @@ public class dbConnector3 {
 //        MyNode node = treeDatabase.parsDatabasesToTree(meta);
 //        treeDatabase.parsTableToTree(meta, node);
 //        treeDatabase.printTree(node, " ");
-        TreeXML treeXML = new TreeXML();
+//        TreeXML treeXML = new TreeXML();
         treeXML.saveTreeToXML(node, "D:\\TestXML2\\src\\main\\resources\\data_edit.xml");
 
 //        pareseColumnToTableST(conn, "productsdb", "customer");

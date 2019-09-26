@@ -225,7 +225,7 @@ public class TreeDatabase extends MyTree {
             attributeSet.put("Comment", comment);
 
             for (String key: attributeSet.keySet()) {
-                if (attributeSet.get(key) != null) {
+                if ((attributeSet.get(key) != null) && (!"".equals(attributeSet.get(key)))) {
                     columnNode.addAttributes(key, attributeSet.get(key));
                 }
             }
@@ -235,28 +235,33 @@ public class TreeDatabase extends MyTree {
     }
 
     // парсим первичные ключи в таблицу
-    public MyNode parsePrimaryKeyToTable(DatabaseMetaData meta, String databaseName, String tableName, MyNode parent) throws SQLException {
-        String PKColumnName;
+    public MyNode parseIndexesToTable(DatabaseMetaData meta, String databaseName, String tableName, MyNode parent) throws SQLException {
+
         // получаем узел, который соотвтствует БД (находим его как дочерний узел parent)
         MyNode dbTableNode = parent.getChild(databaseName);
         // получаем узел, который соотвтствует таблице (в найденной БД)
         MyNode tableNode = findNodeInTreeFirst(dbTableNode, tableName);
         // получаем узел индексов в данной таблице
         MyNode indexesNode = findNodeInTreeFirst(tableNode, "Indexes");
-        MyNode PKNode = new MyNode();
-        PKNode.setName("Primary_Key");
-        indexesNode.addChild(PKNode);
-        // получаем в resultSet колонки таблицы
-        ResultSet resultSet = meta.getPrimaryKeys(databaseName, null, tableName);
-//        if (resultSet != null) {
-//
-//        }
-        // пока есть колонки
-        while (resultSet.next()) {
-            PKColumnName = resultSet.getString("COLUMN_NAME");
-            PKNode.addAttributes("Сolumn", PKColumnName);
 
+        ResultSet resultSet = meta.getIndexInfo(databaseName, null, tableName, false, false);
+        while (resultSet.next()) {
+            MyNode indexNode = new MyNode();
+            String indexNodeName = resultSet.getString("INDEX_NAME");
+            indexNode.setName(indexNodeName);
+
+            Map<String, String> attributeSet = new HashMap<>();
+            String indexColumnName = resultSet.getString("COLUMN_NAME");
+            attributeSet.put("Column", indexColumnName);
+
+            for (String key: attributeSet.keySet()) {
+                if (attributeSet.get(key) != null) {
+                    indexNode.addAttributes(key, attributeSet.get(key));
+                }
+            }
+            indexesNode.addChild(indexNode);
         }
+
         return parent;
     }
 
@@ -271,70 +276,58 @@ public class TreeDatabase extends MyTree {
         MyNode FKNode = findNodeInTreeFirst(tableNode, "Foreing_Keys");
 
         // получаем в resultSet колонки таблицы
-        ResultSet resultSet = meta.getExportedKeys(databaseName, null, tableName);
+        ResultSet resultSet = meta.getImportedKeys(databaseName, null, tableName);
 //        if (resultSet != null) {
 //
 //        }
         // пока есть колонки
         while (resultSet.next()) {
-            String FKColumnName = resultSet.getString("FKCOLUMN_NAME");
-            String FKTableName = resultSet.getString("FKTABLE_NAME");
-            FKNode.addAttributes("Сolumn", FKColumnName);
-            FKNode.addAttributes("Table", FKTableName);
+            MyNode FKNameNode = new MyNode();
+            String FKName = resultSet.getString("FK_NAME");
+            FKNameNode.setName(FKName);
 
+            Map<String, String> attributeSet = new HashMap<>();
+
+            String FKTableName = resultSet.getString("FKTABLE_NAME");
+            attributeSet.put("table_Reff", FKTableName);
+            String FKColumnName = resultSet.getString("FKCOLUMN_NAME");
+            attributeSet.put("column_FK", FKColumnName);
+
+            // получить значения в виде строк, а не цифер
+            String FKUpdateRule = resultSet.getString("UPDATE_RULE");
+            attributeSet.put("update_rule", FKUpdateRule);
+            String FKDeleteRule = resultSet.getString("DELETE_RULE");
+            attributeSet.put("delete_rule", FKDeleteRule);
+
+            for (String key: attributeSet.keySet()) {
+                if (attributeSet.get(key) != null) {
+                    FKNameNode.addAttributes(key, attributeSet.get(key));
+                }
+            }
+            FKNode.addChild(FKNameNode);
         }
         return parent;
     }
-    public MyNode parseDataBase (DatabaseMetaData meta) throws SQLException {
 
-        String[] types = {"TABLE"};
-        String tableName;
-        String columnName;
+    public MyNode parseDatabaseToTree(DatabaseMetaData meta, String databaseName, MyNode parent) throws SQLException {
 
-        ResultSet resultSet = meta.getCatalogs();
-        MyNode startNode = new MyNode();
-        startNode.setName("schemas");
-        setRoot(startNode);
+        parseNodesToDatabase(databaseName, parent);
+        parseTablesToDatabase(meta, databaseName, parent);
+        MyNode dbNode = findNodeInTreeFirst(parent, databaseName);
+        MyNode tablesRoot = dbNode.getChild("Tables");
+        List<MyNode> tables = tablesRoot.getChildren();
+//
+        for (MyNode table: tables) {
+            MyNode tableNode = parseNodesToTable(databaseName, table.getName(), parent);
+            parseColumnToTable(meta, databaseName, table.getName(), parent);
+            parseIndexesToTable(meta, databaseName, table.getName(), parent);
+            parseForeingKeyToTable(meta, databaseName, table.getName(), parent);
 
-        //пока есть БД (resultSet.next()) добавляем в узел все БД
-        while (resultSet.next()) {
-//            System.out.println("Schema Name = " + resultSet.getString("TABLE_CAT"));
-            // создается новый узел
-            MyNode dataBaseNode = new MyNode();
-            // узлу устанавливаем имя БД
-            dataBaseNode.setName(resultSet.getString("TABLE_CAT"));
-            // к startNode добавляем Child (dataBaseNode, у которого имя БД)
-            startNode.addChild(dataBaseNode);
         }
-
-        for (MyNode dbNode : startNode.getChildren()) {
-            // переопределили resultSet, получает таблицы БД (dbNode)
-            resultSet = meta.getTables(dbNode.getName(), null, "%", types);
-            // пока в БД (dbNode) есть таблицы добавляем в узел БД все узлы таблицы (tableNode)
-            while (resultSet.next()) {
-                // создаем узел для таблицы
-                MyNode tableNode = new MyNode();
-                // получаем имя таблицы
-                tableName = resultSet.getString(3);
-                // устанавливаем узлу имя таблицы
-                tableNode.setName(tableName);
-                dbNode.addChild(tableNode);
-//                    System.out.println("Table Name = " + tableName);
-            }
-            for (MyNode tableNode : dbNode.getChildren()) {
-                // переопределили resultSet, получает таблицы БД (dbNode)
-                resultSet = meta.getColumns(dbNode.getName(), null, tableNode.getName(), "%");
-
-                while (resultSet.next()) {
-                    MyNode columnNode = new MyNode();
-                    columnName = resultSet.getString(4);
-                    columnNode.setName(columnName);
-                    tableNode.addChild(columnNode);
-                }
-            }
-        }
-        resultSet.close();
-        return startNode;
+        parseStoredProceduresToDatabase(meta, databaseName, parent);
+        parseViewsToDatabase(meta, databaseName, parent);
+        parseFunctionsToDatabase(meta, databaseName, parent);
+        return parent;
     }
 
 }
