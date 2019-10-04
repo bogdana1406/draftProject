@@ -42,7 +42,7 @@ public class TreeDatabase extends MyTree {
         return startNode;
     }
 
-    // +++++++++++++++добавляем все узлы в БД (Tables, Views, Stored_Procedures, Functions)+++++++++++++++++++++++++++
+    // +++++++++++++++добавляем все узлы в БД (CreateTableNodes, Views, Stored_Procedures, Functions)+++++++++++++++++++++++++++
     //============================================================================
 
     // функция принимает корень дерева и название БД, в которую нужно подгружать узлы,
@@ -53,7 +53,7 @@ public class TreeDatabase extends MyTree {
         MyNode dbNode = parent.getChild(databaseName);
         // узел таблиц
         MyNode tableNode = new MyNode();
-        tableNode.setName("Tables");
+        tableNode.setName("CreateTableNodes");
         // узел Views
         MyNode viewNode = new MyNode();
         viewNode.setName("Views");
@@ -108,7 +108,7 @@ public class TreeDatabase extends MyTree {
         ResultSet resultSet = meta.getTables(databaseName, null, null, types);
         String tableName;
         // из дерева получаем узел (ребенка) с названием БД, а у него узел таблиц
-        MyNode dbTableNode = parent.getChild(databaseName).getChild("Tables");
+        MyNode dbTableNode = parent.getChild(databaseName).getChild("CreateTableNodes");
         while (resultSet.next()) {
             // пока в resultSet содежаться таблицы создаем новый узел
             MyNode tableNode = new MyNode();
@@ -192,7 +192,7 @@ public class TreeDatabase extends MyTree {
 
         String columnName;
         // получаем узел, который соотвтствует БД (находим его как дочерний узел parent)
-        MyNode dbTableNode = parent.getChild(databaseName).getChild("Tables");
+        MyNode dbTableNode = parent.getChild(databaseName).getChild("CreateTableNodes");
         // получаем узел, который соотвтствует таблице (находим его как дочерний узел БД)
         MyNode tableColumnNode = dbTableNode.getChild(tableName).getChild("Columns");
         // получаем в resultSet колонки таблицы
@@ -218,8 +218,8 @@ public class TreeDatabase extends MyTree {
             String columnDef = resultSet.getString("COLUMN_DEF");
             attributeSet.put("Default_Value", columnDef);
             // допустимо ли NULL
-            int nullable = resultSet.getInt("NULLABLE");
-            attributeSet.put("Nullable", Integer.toString(nullable));
+            String nullable = resultSet.getString("IS_NULLABLE");
+            attributeSet.put("Nullable", nullable);
             // получить коммент
             String comment = resultSet.getString("REMARKS");
             attributeSet.put("Comment", comment);
@@ -314,7 +314,7 @@ public class TreeDatabase extends MyTree {
         parseNodesToDatabase(databaseName, parent);
         parseTablesToDatabase(meta, databaseName, parent);
         MyNode dbNode = findNodeInTreeFirst(parent, databaseName);
-        MyNode tablesRoot = dbNode.getChild("Tables");
+        MyNode tablesRoot = dbNode.getChild("CreateTableNodes");
         List<MyNode> tables = tablesRoot.getChildren();
 //
         for (MyNode table: tables) {

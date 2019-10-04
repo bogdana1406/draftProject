@@ -1,0 +1,16 @@
+{
+  "name" : "schemas",
+  "sql": "select * from",
+  "attributes" : ["column/name"],
+  "children" : [
+    {
+      "name" : "databases"
+    }
+  ],
+  "schemas" : {
+
+    "databases" : {
+      "tables" : {}
+    }
+  }
+}

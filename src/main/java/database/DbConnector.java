@@ -42,7 +42,7 @@ public class DbConnector {
 
         while (resultSet.next()) {
             tableName = resultSet.getString(3);
-            System.out.println("Table Name = " + tableName);
+            System.out.println("CreateTableNodes Name = " + tableName);
         }
 
         resultSet.close();

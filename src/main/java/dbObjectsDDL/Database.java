@@ -1,4 +1,5 @@
-package dbObjects;
+package dbObjectsDDL;
 
 public class Database {
+
 }

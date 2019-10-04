@@ -61,7 +61,7 @@ public class DbConnector2 {
                 tableName = resultSet.getString(3);
                 tableNode.setName(tableName);
                 dataBaseNode.addChild(tableNode);
-                System.out.println("Table Name = " + tableName);
+                System.out.println("CreateTableNodes Name = " + tableName);
 
             }
 

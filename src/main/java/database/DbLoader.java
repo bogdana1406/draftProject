@@ -61,8 +61,8 @@ public class DbLoader {
 
                 tableName = resultSet.getString(3);
 
-                System.out.println("Table Name = " + tableName);
-                log.info("Table Name = " + tableName);
+                System.out.println("CreateTableNodes Name = " + tableName);
+                log.info("CreateTableNodes Name = " + tableName);
 
             }
 
