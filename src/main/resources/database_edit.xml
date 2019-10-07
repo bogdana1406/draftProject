@@ -4,35 +4,137 @@
     <mysql/>
     <performance_schema/>
     <productsdb>
-        <Tables>
+        <CreateTableNodes>
             <customer>
                 <Columns>
-                    <Id Nullable="1" Size="10" Type="INT"/>
-                    <Age Nullable="1" Size="10" Type="INT"/>
-                    <FirstName Nullable="1" Size="20" Type="VARCHAR"/>
-                    <LastName Nullable="1" Size="20" Type="VARCHAR"/>
+                    <Id Nullable="YES" Size="10" Type="INT"/>
+                    <Age Nullable="YES" Size="10" Type="INT"/>
+                    <FirstName Nullable="YES" Size="20" Type="VARCHAR"/>
+                    <LastName Nullable="YES" Size="20" Type="VARCHAR"/>
                 </Columns>
                 <Indexes/>
                 <Foreing_Keys/>
             </customer>
+            <customer_new>
+                <Columns>
+                    <customer_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <store_id Nullable="NO" Size="10" Type="INT"/>
+                    <first_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <last_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <email Nullable="YES" Size="50" Type="VARCHAR"/>
+                    <address_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <active Default_Value="1" Nullable="NO" Size="1" Type="BIT"/>
+                    <create_date Nullable="NO" Size="26" Type="DATETIME"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="YES" Size="26" Type="TIMESTAMP"/>
+                </Columns>
+                <Indexes>
+                    <PRIMARY Column="customer_id"/>
+                    <fk_customernew_customerref Column="address_id"/>
+                    <fk_customernew_customerref Column="customer_id"/>
+                    <idx_fk_address_id Column="address_id"/>
+                    <idx_fk_store_id Column="store_id"/>
+                    <idx_last_name Column="last_name"/>
+                </Indexes>
+                <Foreing_Keys>
+                    <fk_customernew_customerref column_FK="address_id" delete_rule="1" table_Reff="customer_new"
+                                                update_rule="0"/>
+                    <fk_customernew_customerref column_FK="customer_id" delete_rule="1" table_Reff="customer_new"
+                                                update_rule="0"/>
+                    <fk_customernew_orders column_FK="store_id" delete_rule="1" table_Reff="customer_new"
+                                           update_rule="0"/>
+                </Foreing_Keys>
+            </customer_new>
+            <customer_new2>
+                <Columns>
+                    <customer_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <store_id Nullable="NO" Size="10" Type="INT"/>
+                    <first_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <last_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <email Nullable="YES" Size="50" Type="VARCHAR"/>
+                    <address_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <active Default_Value="1" Nullable="NO" Size="1" Type="BIT"/>
+                    <create_date Nullable="NO" Size="26" Type="DATETIME"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="YES" Size="26" Type="TIMESTAMP"/>
+                </Columns>
+                <Indexes>
+                    <PRIMARY Column="customer_id"/>
+                    <fk_customernew2_customerref Column="address_id"/>
+                    <fk_customernew2_customerref Column="customer_id"/>
+                    <fk_customernew2_orders Column="store_id"/>
+                </Indexes>
+                <Foreing_Keys>
+                    <fk_customernew2_customerref column_FK="address_id" delete_rule="1" table_Reff="customer_new2"
+                                                 update_rule="0"/>
+                    <fk_customernew2_customerref column_FK="customer_id" delete_rule="1" table_Reff="customer_new2"
+                                                 update_rule="0"/>
+                    <fk_customernew2_orders column_FK="store_id" delete_rule="1" table_Reff="customer_new2"
+                                            update_rule="0"/>
+                </Foreing_Keys>
+            </customer_new2>
+            <customer_ref>
+                <Columns>
+                    <customerref_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <firstref_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <lastref_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <addressref_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                </Columns>
+                <Indexes>
+                    <PRIMARY Column="customerref_id"/>
+                    <PRIMARY Column="addressref_id"/>
+                </Indexes>
+                <Foreing_Keys/>
+            </customer_ref>
             <customers>
                 <Columns>
-                    <Id Nullable="0" Size="10" Type="INT"/>
-                    <Age Nullable="1" Size="10" Type="INT"/>
-                    <FirstName Nullable="1" Size="20" Type="VARCHAR"/>
-                    <LastName Nullable="1" Size="20" Type="VARCHAR"/>
-                    <Phone Nullable="0" Size="10" Type="INT"/>
+                    <Id Nullable="NO" Size="10" Type="INT"/>
+                    <Age Nullable="YES" Size="10" Type="INT"/>
+                    <FirstName Nullable="YES" Size="20" Type="VARCHAR"/>
+                    <LastName Nullable="YES" Size="20" Type="VARCHAR"/>
+                    <Phone Nullable="NO" Size="10" Type="INT"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="Id"/>
                 </Indexes>
                 <Foreing_Keys/>
             </customers>
+            <customers3>
+                <Columns>
+                    <Id Nullable="NO" Size="10" Type="INT"/>
+                    <Age Nullable="YES" Size="10" Type="INT"/>
+                    <FirstName Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <LastName Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <Email Nullable="YES" Size="30" Type="VARCHAR"/>
+                    <Phone Nullable="NO" Size="20" Type="VARCHAR"/>
+                </Columns>
+                <Indexes>
+                    <customer_email_uq Column="Email"/>
+                    <customer_phone_uq Column="Phone"/>
+                    <PRIMARY Column="Id"/>
+                </Indexes>
+                <Foreing_Keys/>
+            </customers3>
+            <customers4>
+                <Columns>
+                    <Id Nullable="NO" Size="10" Type="INT"/>
+                    <Age Nullable="YES" Size="10" Type="INT"/>
+                    <FirstName Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <LastName Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <Email Nullable="YES" Size="30" Type="VARCHAR"/>
+                    <Phone Nullable="NO" Size="20" Type="VARCHAR"/>
+                </Columns>
+                <Indexes>
+                    <customer_email_uq Column="Email"/>
+                    <customer_phone_email_uq Column="Phone"/>
+                    <customer_phone_email_uq Column="Email"/>
+                    <PRIMARY Column="Id"/>
+                </Indexes>
+                <Foreing_Keys/>
+            </customers4>
             <orders>
                 <Columns>
-                    <Id Nullable="0" Size="10" Type="INT"/>
-                    <CustomerId Nullable="1" Size="10" Type="INT"/>
-                    <CreatedAt Nullable="1" Size="10" Type="DATE"/>
+                    <Id Nullable="NO" Size="10" Type="INT"/>
+                    <CustomerId Nullable="YES" Size="10" Type="INT"/>
+                    <CreatedAt Nullable="YES" Size="10" Type="DATE"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="Id"/>
@@ -42,19 +144,66 @@
                     <orders_ibfk_1 column_FK="CustomerId" delete_rule="3" table_Reff="orders" update_rule="3"/>
                 </Foreing_Keys>
             </orders>
-        </Tables>
+            <ptable>
+                <Columns>
+                    <Key1 Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <Key2 Nullable="NO" Size="10" Type="DATE"/>
+                </Columns>
+                <Indexes>
+                    <PRIMARY Column="Key1"/>
+                    <PRIMARY Column="Key2"/>
+                </Indexes>
+                <Foreing_Keys/>
+            </ptable>
+            <stable>
+                <Columns>
+                    <AutoID Nullable="NO" Size="10" Type="INT"/>
+                    <Key1 Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <Key2 Nullable="NO" Size="10" Type="DATE"/>
+                </Columns>
+                <Indexes>
+                    <PRIMARY Column="AutoID"/>
+                    <FK_STable_PTable Column="Key1"/>
+                    <FK_STable_PTable Column="Key2"/>
+                </Indexes>
+                <Foreing_Keys>
+                    <FK_STable_PTable column_FK="Key1" delete_rule="3" table_Reff="stable" update_rule="3"/>
+                    <FK_STable_PTable column_FK="Key2" delete_rule="3" table_Reff="stable" update_rule="3"/>
+                </Foreing_Keys>
+            </stable>
+            <thirdtable>
+                <Columns>
+                    <ID Nullable="NO" Size="10" Type="INT"/>
+                    <Key1 Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <Key2 Nullable="NO" Size="10" Type="DATE"/>
+                    <Key3 Nullable="NO" Size="10" Type="INT"/>
+                    <key4 Nullable="NO" Size="10" Type="INT"/>
+                </Columns>
+                <Indexes>
+                    <PRIMARY Column="ID"/>
+                    <FK_ThirdTable_PTable Column="Key1"/>
+                    <FK_ThirdTable_PTable Column="Key2"/>
+                    <FK_ThirdTable_STable Column="Key3"/>
+                </Indexes>
+                <Foreing_Keys>
+                    <FK_ThirdTable_PTable column_FK="Key1" delete_rule="3" table_Reff="thirdtable" update_rule="3"/>
+                    <FK_ThirdTable_PTable column_FK="Key2" delete_rule="3" table_Reff="thirdtable" update_rule="3"/>
+                    <FK_ThirdTable_STable column_FK="Key3" delete_rule="3" table_Reff="thirdtable" update_rule="3"/>
+                </Foreing_Keys>
+            </thirdtable>
+        </CreateTableNodes>
         <Views/>
         <Stored_Procedures/>
         <Functions/>
     </productsdb>
     <sakila>
-        <Tables>
+        <CreateTableNodes>
             <actor>
                 <Columns>
-                    <actor_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <first_name Nullable="0" Size="45" Type="VARCHAR"/>
-                    <last_name Nullable="0" Size="45" Type="VARCHAR"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <actor_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <first_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <last_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="actor_id"/>
@@ -64,15 +213,15 @@
             </actor>
             <address>
                 <Columns>
-                    <address_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <address Nullable="0" Size="50" Type="VARCHAR"/>
-                    <address2 Nullable="1" Size="50" Type="VARCHAR"/>
-                    <district Nullable="0" Size="20" Type="VARCHAR"/>
-                    <city_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <postal_code Nullable="1" Size="10" Type="VARCHAR"/>
-                    <phone Nullable="0" Size="20" Type="VARCHAR"/>
-                    <location Nullable="0" Size="65535" Type="GEOMETRY"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <address_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <address Nullable="NO" Size="50" Type="VARCHAR"/>
+                    <address2 Nullable="YES" Size="50" Type="VARCHAR"/>
+                    <district Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <city_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <postal_code Nullable="YES" Size="10" Type="VARCHAR"/>
+                    <phone Nullable="NO" Size="20" Type="VARCHAR"/>
+                    <location Nullable="NO" Size="65535" Type="GEOMETRY"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="address_id"/>
@@ -85,9 +234,9 @@
             </address>
             <category>
                 <Columns>
-                    <category_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <name Nullable="0" Size="25" Type="VARCHAR"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <category_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <name Nullable="NO" Size="25" Type="VARCHAR"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="category_id"/>
@@ -96,10 +245,10 @@
             </category>
             <city>
                 <Columns>
-                    <city_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <city Nullable="0" Size="50" Type="VARCHAR"/>
-                    <country_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <city_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <city Nullable="NO" Size="50" Type="VARCHAR"/>
+                    <country_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="city_id"/>
@@ -111,9 +260,9 @@
             </city>
             <country>
                 <Columns>
-                    <country_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <country Nullable="0" Size="50" Type="VARCHAR"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <country_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <country Nullable="NO" Size="50" Type="VARCHAR"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="country_id"/>
@@ -122,15 +271,15 @@
             </country>
             <customer>
                 <Columns>
-                    <customer_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <store_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <first_name Nullable="0" Size="45" Type="VARCHAR"/>
-                    <last_name Nullable="0" Size="45" Type="VARCHAR"/>
-                    <email Nullable="1" Size="50" Type="VARCHAR"/>
-                    <address_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <active Default_Value="1" Nullable="0" Size="1" Type="BIT"/>
-                    <create_date Nullable="0" Size="26" Type="DATETIME"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="1" Size="26" Type="TIMESTAMP"/>
+                    <customer_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <store_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <first_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <last_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <email Nullable="YES" Size="50" Type="VARCHAR"/>
+                    <address_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <active Default_Value="1" Nullable="NO" Size="1" Type="BIT"/>
+                    <create_date Nullable="NO" Size="26" Type="DATETIME"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="YES" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="customer_id"/>
@@ -145,19 +294,19 @@
             </customer>
             <film>
                 <Columns>
-                    <film_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <title Nullable="0" Size="255" Type="VARCHAR"/>
-                    <description Nullable="1" Size="65535" Type="TEXT"/>
-                    <release_year Nullable="1" Size="4" Type="YEAR"/>
-                    <language_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <original_language_id Nullable="1" Size="3" Type="TINYINT UNSIGNED"/>
-                    <rental_duration Default_Value="3" Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <rental_rate Default_Value="4.99" Nullable="0" Size="4" Type="DECIMAL"/>
-                    <length Nullable="1" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <replacement_cost Default_Value="19.99" Nullable="0" Size="5" Type="DECIMAL"/>
-                    <rating Default_Value="G" Nullable="1" Size="5" Type="ENUM"/>
-                    <special_features Nullable="1" Size="54" Type="SET"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <film_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <title Nullable="NO" Size="255" Type="VARCHAR"/>
+                    <description Nullable="YES" Size="65535" Type="TEXT"/>
+                    <release_year Nullable="YES" Size="4" Type="YEAR"/>
+                    <language_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <original_language_id Nullable="YES" Size="3" Type="TINYINT UNSIGNED"/>
+                    <rental_duration Default_Value="3" Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <rental_rate Default_Value="4.99" Nullable="NO" Size="4" Type="DECIMAL"/>
+                    <length Nullable="YES" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <replacement_cost Default_Value="19.99" Nullable="NO" Size="5" Type="DECIMAL"/>
+                    <rating Default_Value="G" Nullable="YES" Size="5" Type="ENUM"/>
+                    <special_features Nullable="YES" Size="54" Type="SET"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="film_id"/>
@@ -166,16 +315,16 @@
                     <idx_title Column="title"/>
                 </Indexes>
                 <Foreing_Keys>
+                    <fk_film_language column_FK="language_id" delete_rule="1" table_Reff="film" update_rule="0"/>
                     <fk_film_language_original column_FK="original_language_id" delete_rule="1" table_Reff="film"
                                                update_rule="0"/>
-                    <fk_film_language column_FK="language_id" delete_rule="1" table_Reff="film" update_rule="0"/>
                 </Foreing_Keys>
             </film>
             <film_actor>
                 <Columns>
-                    <actor_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <film_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <actor_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <film_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="actor_id"/>
@@ -189,9 +338,9 @@
             </film_actor>
             <film_category>
                 <Columns>
-                    <film_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <category_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <film_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <category_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="film_id"/>
@@ -207,9 +356,9 @@
             </film_category>
             <film_text>
                 <Columns>
-                    <film_id Nullable="0" Size="5" Type="SMALLINT"/>
-                    <title Nullable="0" Size="255" Type="VARCHAR"/>
-                    <description Nullable="1" Size="65535" Type="TEXT"/>
+                    <film_id Nullable="NO" Size="5" Type="SMALLINT"/>
+                    <title Nullable="NO" Size="255" Type="VARCHAR"/>
+                    <description Nullable="YES" Size="65535" Type="TEXT"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="film_id"/>
@@ -220,10 +369,10 @@
             </film_text>
             <inventory>
                 <Columns>
-                    <inventory_id Nullable="0" Size="8" Type="MEDIUMINT UNSIGNED"/>
-                    <film_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <store_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <inventory_id Nullable="NO" Size="8" Type="MEDIUMINT UNSIGNED"/>
+                    <film_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <store_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="inventory_id"/>
@@ -238,9 +387,9 @@
             </inventory>
             <language>
                 <Columns>
-                    <language_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <name Nullable="0" Size="20" Type="CHAR"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <language_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <name Nullable="NO" Size="20" Type="CHAR"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="language_id"/>
@@ -249,13 +398,13 @@
             </language>
             <payment>
                 <Columns>
-                    <payment_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <customer_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <staff_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <rental_id Nullable="1" Size="10" Type="INT"/>
-                    <amount Nullable="0" Size="5" Type="DECIMAL"/>
-                    <payment_date Nullable="0" Size="26" Type="DATETIME"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="1" Size="26" Type="TIMESTAMP"/>
+                    <payment_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <customer_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <staff_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <rental_id Nullable="YES" Size="10" Type="INT"/>
+                    <amount Nullable="NO" Size="5" Type="DECIMAL"/>
+                    <payment_date Nullable="NO" Size="26" Type="DATETIME"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="YES" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="payment_id"/>
@@ -271,13 +420,13 @@
             </payment>
             <rental>
                 <Columns>
-                    <rental_id Nullable="0" Size="10" Type="INT"/>
-                    <rental_date Nullable="0" Size="26" Type="DATETIME"/>
-                    <inventory_id Nullable="0" Size="8" Type="MEDIUMINT UNSIGNED"/>
-                    <customer_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <return_date Nullable="1" Size="26" Type="DATETIME"/>
-                    <staff_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <rental_id Nullable="NO" Size="10" Type="INT"/>
+                    <rental_date Nullable="NO" Size="26" Type="DATETIME"/>
+                    <inventory_id Nullable="NO" Size="8" Type="MEDIUMINT UNSIGNED"/>
+                    <customer_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <return_date Nullable="YES" Size="26" Type="DATETIME"/>
+                    <staff_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="rental_id"/>
@@ -296,17 +445,17 @@
             </rental>
             <staff>
                 <Columns>
-                    <staff_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <first_name Nullable="0" Size="45" Type="VARCHAR"/>
-                    <last_name Nullable="0" Size="45" Type="VARCHAR"/>
-                    <address_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <picture Nullable="1" Size="65535" Type="BLOB"/>
-                    <email Nullable="1" Size="50" Type="VARCHAR"/>
-                    <store_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <active Default_Value="1" Nullable="0" Size="1" Type="BIT"/>
-                    <username Nullable="0" Size="16" Type="VARCHAR"/>
-                    <password Nullable="1" Size="40" Type="VARCHAR"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <staff_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <first_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <last_name Nullable="NO" Size="45" Type="VARCHAR"/>
+                    <address_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <picture Nullable="YES" Size="65535" Type="BLOB"/>
+                    <email Nullable="YES" Size="50" Type="VARCHAR"/>
+                    <store_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <active Default_Value="1" Nullable="NO" Size="1" Type="BIT"/>
+                    <username Nullable="NO" Size="16" Type="VARCHAR"/>
+                    <password Nullable="YES" Size="40" Type="VARCHAR"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <PRIMARY Column="staff_id"/>
@@ -320,10 +469,10 @@
             </staff>
             <store>
                 <Columns>
-                    <store_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <manager_staff_id Nullable="0" Size="3" Type="TINYINT UNSIGNED"/>
-                    <address_id Nullable="0" Size="5" Type="SMALLINT UNSIGNED"/>
-                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="0" Size="26" Type="TIMESTAMP"/>
+                    <store_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <manager_staff_id Nullable="NO" Size="3" Type="TINYINT UNSIGNED"/>
+                    <address_id Nullable="NO" Size="5" Type="SMALLINT UNSIGNED"/>
+                    <last_update Default_Value="CURRENT_TIMESTAMP" Nullable="NO" Size="26" Type="TIMESTAMP"/>
                 </Columns>
                 <Indexes>
                     <idx_unique_manager Column="manager_staff_id"/>
@@ -335,7 +484,7 @@
                     <fk_store_staff column_FK="manager_staff_id" delete_rule="1" table_Reff="store" update_rule="0"/>
                 </Foreing_Keys>
             </store>
-        </Tables>
+        </CreateTableNodes>
         <Views>
             <actor_info/>
             <customer_list/>

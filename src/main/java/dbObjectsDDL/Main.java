@@ -31,26 +31,26 @@ public class Main {
 //        Helper.getPK(meta, "productsdb", "ptable");
 //        Helper.getImportedKeys(meta, "productsdb", "thirdtable");
         Helper.getIndexInfo(meta, "productsdb", "customers4");
-        MyNode uniqueKey = createTableNodesNode.getUkNode(meta, "productsdb", "customers4");
-        MyNode pkNode = createTableNodesNode.getPkNode(meta, "productsdb", "ptable");
-
-        MyNode foreignKeys = createTableNodesNode.getFkNode(meta, "productsdb", "customer_new2");
-        System.out.println("==============================");
-//        createTableNodesNode.getIndexInfo(meta, "sakila", "address");
-        MyNode columns = createTableNodesNode.getTableColumnNode(meta, "sakila", "address");
-        TreeXML treeXML = new TreeXML();
-        treeXML.saveTreeToXML(foreignKeys, "D:\\TestXML2\\src\\main\\resources\\tableFKNode_edit.xml");
-        treeXML.saveTreeToXML(columns, "D:\\TestXML2\\src\\main\\resources\\tablColumns_edit.xml");
-        treeXML.saveTreeToXML(uniqueKey, "D:\\TestXML2\\src\\main\\resources\\unique_edit.xml");
-        TableDDL tableDDL = new TableDDL();
-//        tableDDL.printColumnFromTableNode(columns);
-        System.out.println("================================");
-//        tableDDL.printFKTableNode(foreignKeys);
-//        DatabaseMetaData meta = conn.getMetaData();
-        tableDDL.printColumnFromTableNode(meta, "productsdb", "customer_new2");
-        tableDDL.printPkTableNode(meta, "productsdb", "customer_new2");
-        tableDDL.printUkTableNode(meta, "productsdb", "customer_new2");
-        tableDDL.printFkTableNode(meta, "productsdb", "customer_new2");
+//        MyNode uniqueKey = createTableNodesNode.getUkNode(meta, "productsdb", "customers4");
+//        MyNode pkNode = createTableNodesNode.getPkNode(meta, "productsdb", "ptable");
+//
+//        MyNode foreignKeys = createTableNodesNode.getFkNode(meta, "productsdb", "customer_new2");
+//        System.out.println("==============================");
+////        createTableNodesNode.getIndexInfo(meta, "sakila", "address");
+//        MyNode columns = createTableNodesNode.getTableColumnNode(meta, "sakila", "address");
+//        TreeXML treeXML = new TreeXML();
+//        treeXML.saveTreeToXML(foreignKeys, "D:\\TestXML2\\src\\main\\resources\\tableFKNode_edit.xml");
+//        treeXML.saveTreeToXML(columns, "D:\\TestXML2\\src\\main\\resources\\tablColumns_edit.xml");
+//        treeXML.saveTreeToXML(uniqueKey, "D:\\TestXML2\\src\\main\\resources\\unique_edit.xml");
+//        TableDDL tableDDL = new TableDDL();
+////        tableDDL.printColumnFromTableNode(columns);
+//        System.out.println("================================");
+////        tableDDL.printFKTableNode(foreignKeys);
+////        DatabaseMetaData meta = conn.getMetaData();
+//        tableDDL.printColumnFromTableNode(meta, "productsdb", "customer_new2");
+//        tableDDL.printPkTableNode(meta, "productsdb", "customer_new2");
+//        tableDDL.printUkTableNode(meta, "productsdb", "customers4");
+//        tableDDL.printFkTableNode(meta, "productsdb", "customer_new2");
 //        tableDDL.printPKTableNode(pkNode);
 //        tableDDL.printUniqueTableNode(uniqueKey);
 //

@@ -22,14 +22,15 @@ import tree.MyTree;
 
 public class TableDDL extends CreateTableNodes {
 
-    public void printColumnFromTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
+    public String printColumnFromTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
 
         MyNode tableColumns = getTableColumnNode(meta, databaseName, tableName);
 
         StringBuffer strBuff = new StringBuffer("CREATE TABLE ");
 //        String tableName = tableColumns.getName();
         strBuff.append(tableName + "(\n");
-
+        int childrenSize = tableColumns.getChildren().size();
+        int j = 0;
         for (MyNode tableColumn: tableColumns.getChildren()) {
             strBuff.append(tableColumn.getName() + " ");
             Map<String, String> columnAttributes = tableColumn.getAttributes();
@@ -40,19 +41,26 @@ public class TableDDL extends CreateTableNodes {
                     strBuff.append(columnAttributes.get(key) + " ");
                     i++;
                 } else {
-                    strBuff.append(columnAttributes.get(key) + ",\n");
+                    strBuff.append(columnAttributes.get(key));
                 }
             }
-//            strBuff.append(",\n");
+            if (j < childrenSize - 1) {
+            strBuff.append(",\n");
+            j++;
+            }
         }
-
         System.out.println(strBuff.toString());
+        return strBuff.toString();
     }
 
-    public void printFkTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
+    public String printFkTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
         MyNode fkNodes = getFkNode(meta, databaseName, tableName);
+        int childrenSize = fkNodes.getChildren().size();
+        int n = 0;
+        StringBuffer strBuff = new StringBuffer();
         for (MyNode fkNode: fkNodes.getChildren()) {
-            StringBuffer strBuff = new StringBuffer("CONSTRAINT ");
+            strBuff.append("CONSTRAINT ");
+//            StringBuffer strBuff = new StringBuffer("CONSTRAINT ");
             strBuff.append(fkNode.getName() + " (");
             MyNode fkColumn = fkNode.getChild("fk_Columns");
             Map<String, String> columnAttributes = fkColumn.getAttributes();
@@ -92,16 +100,23 @@ public class TableDDL extends CreateTableNodes {
             strBuff.append("ON DELETE " + delRule + " ");
             String updateRule = rulesAttributes.get("UPDATE_RULE");
             strBuff.append("ON UPDATE " + updateRule);
-            strBuff.append(",");
-            System.out.println(strBuff.toString());
+            if (n < childrenSize - 1) {
+                strBuff.append(",\n");
+                n++;
+            }
         }
+//        System.out.println(strBuff.toString());
+        return strBuff.toString();
     }
 
-    public void printPkTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
+    public String printPkTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
         MyNode pkNode = getPkNode(meta, databaseName, tableName);
-        StringBuffer strBuff = new StringBuffer("CONSTRAINT ");
-        strBuff.append(pkNode.getName()+ " PRIMARY KEY (");
+        StringBuffer strBuff = new StringBuffer();
         Map<String, String> columnAttributes = pkNode.getAttributes();
+        if (!columnAttributes.isEmpty()) {
+            strBuff.append("CONSTRAINT ");
+            strBuff.append(pkNode.getName()+ " PRIMARY KEY (");
+        }
         int size = columnAttributes.size();
         int i = 0;
         for (String key: columnAttributes.keySet()) {
@@ -113,12 +128,17 @@ public class TableDDL extends CreateTableNodes {
             }
         }
         System.out.println(strBuff);
+        return strBuff.toString();
     }
 
-    public void printUkTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
+    public String printUkTableNode(DatabaseMetaData meta, String databaseName, String tableName) throws SQLException {
         MyNode ukNodes = getUkNode(meta, databaseName, tableName);
-        StringBuffer strBuff = new StringBuffer("CONSTRAINT ");
+        StringBuffer strBuff = new StringBuffer();
+        int childrenSize = ukNodes.getChildren().size();
+        int n = 0;
+//        StringBuffer strBuff = new StringBuffer("CONSTRAINT ");
         for (MyNode ukNode: ukNodes.getChildren()) {
+            strBuff.append("CONSTRAINT ");
             strBuff.append(ukNode.getName() + " UNIQUE (");
             Map<String, String> uqNodeAttributes = ukNode.getAttributes();
             int size = uqNodeAttributes.size();
@@ -128,10 +148,17 @@ public class TableDDL extends CreateTableNodes {
                     strBuff.append(uqNodeAttributes.get(key) + ", ");
                     i++;
                 } else {
-                strBuff.append(uqNodeAttributes.get(key) + ")\n");
+                strBuff.append(uqNodeAttributes.get(key) + ")");
                 }
+            }
+            if (n < childrenSize - 1) {
+                strBuff.append(",\n");
+                n++;
             }
         }
         System.out.println(strBuff);
+        return strBuff.toString();
     }
+
+
 }
